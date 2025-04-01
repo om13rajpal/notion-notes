@@ -9,12 +9,14 @@ import (
 var (
 	PORT string
 	MONGO_URI string
+	JWT_SECRET string
 )
 
 func LoadEnv() {
 	godotenv.Load()
 	PORT = getEnv("PORT", "5000")
 	MONGO_URI = getEnv("MONGO_URI", "mongodb://localhost:27017/notes")
+	JWT_SECRET = getEnv("JWT_SECRET", "golang")
 }
 
 func getEnv(key string, fallback string) string {

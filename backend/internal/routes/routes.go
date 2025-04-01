@@ -12,6 +12,8 @@ func InitRouter() *gin.Engine {
 	router.SetTrustedProxies(nil)
 
 	router.GET("/", handlers.HandleHome)
+	router.POST("/signup", handlers.SignupHandler)
+	router.POST("/login", handlers.LoginHandler)
 
 	return router
 }
