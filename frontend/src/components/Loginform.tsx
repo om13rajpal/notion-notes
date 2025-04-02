@@ -19,10 +19,11 @@ import { Input } from "@/components/ui/input";
 import { API_URL } from "@/constants/url";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useLoginContext } from "@/providers/LoginProvider";
 
 const formSchema = z.object({
   email: z.string().email({
-    message: "Username must be at least 2 characters.",
+    message: "Email must be a valid email.",
   }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
@@ -31,6 +32,8 @@ const formSchema = z.object({
 
 export function LoginForm() {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useLoginContext();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -51,14 +54,17 @@ export function LoginForm() {
       if (data.status) {
         localStorage.setItem("token", data.token);
         toast.success("Logged in successfully");
-        setInterval(() => {}, 1500);
-        navigate("/");
-      } else {
-        toast.error(data.message);
+        setTimeout(() => {
+          navigate("/");
+          setIsLoggedIn(true);
+        }, 1500);
       }
-      console.log(data);
-    } catch (error) {
-      toast.error("Error logging in ");
+    } catch (error: any) {
+      if (error.status === 401) {
+        toast.error("Invalid credentials");
+        return;
+      }
+      toast.error("Error logging in user");
     }
   }
 

@@ -19,6 +19,7 @@ import axios from "axios";
 import { API_URL } from "@/constants/url";
 import { toast } from "sonner";
 import { useNavigate } from "react-router-dom";
+import { useLoginContext } from "@/providers/LoginProvider";
 
 const formSchema = z.object({
   password: z.string().min(6, {
@@ -31,6 +32,8 @@ const formSchema = z.object({
 
 export function SignupForm() {
   const navigate = useNavigate();
+  const { setIsLoggedIn } = useLoginContext();
+
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
@@ -40,19 +43,26 @@ export function SignupForm() {
   });
 
   async function onSubmit(values: z.infer<typeof formSchema>) {
-    const res = await axios.post(API_URL + "/signup", values, {
-      headers: {
-        "Content-Type": "application/json",
-      },
-    });
+    try {
+      const res = await axios.post(API_URL + "/signup", values, {
+        headers: {
+          "Content-Type": "application/json",
+        },
+      });
 
-    const data = res.data;
+      const data = res.data;
 
-    if (data.status) {
-      localStorage.setItem("token", data.token);
-      toast.success("User signed up successfully")
-      setInterval(() => {}, 1500);
-      navigate("/")
+      if (data.status) {
+        localStorage.setItem("token", data.token);
+        toast.success("User signed up successfully");
+        setTimeout(() => {
+          navigate("/");
+          setIsLoggedIn(true);
+        }, 1500);
+      }
+    } catch (error) {
+      toast.error("Error signing up user");
+      return;
     }
   }
 

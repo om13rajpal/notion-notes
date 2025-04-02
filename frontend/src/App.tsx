@@ -2,10 +2,14 @@ import { useEffect } from "react";
 import Navbar from "./components/Navbar";
 import { Route, Routes } from "react-router-dom";
 import Dashboard from "./pages/Dashboard";
-import ProtectedRoute from "./components/ProtectedRoute";
 import Login from "./pages/Login";
 import { Toaster } from "sonner";
 import Signup from "./pages/Signup";
+import { LoginProvider } from "./providers/LoginProvider";
+import {
+  ProtectedDashboardRoute,
+  ProtectedLoginSignupRoute,
+} from "./components/ProtectedRoute";
 
 const App = () => {
   useEffect(() => {
@@ -15,14 +19,20 @@ const App = () => {
 
   return (
     <>
-      <Navbar />
-      <Routes>
-        <Route element={<ProtectedRoute />}>
-          <Route path="/" element={<Dashboard />} />
-        </Route>
-        <Route path="/login" element={<Login />} />
-        <Route path="/signup" element={<Signup />} />
-      </Routes>
+      <LoginProvider>
+        <Navbar />
+        <Routes>
+          <Route element={<ProtectedDashboardRoute />}>
+            <Route path="/" element={<Dashboard />} />
+          </Route>
+          <Route element={<ProtectedLoginSignupRoute />}>
+            <Route path="/login" element={<Login />} />
+          </Route>
+          <Route element={<ProtectedLoginSignupRoute />}>
+            <Route path="/signup" element={<Signup />} />
+          </Route>
+        </Routes>
+      </LoginProvider>
       <Toaster />
     </>
   );
