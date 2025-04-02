@@ -15,8 +15,8 @@ var (
 )
 
 func LoadEnv() {
-	godotenv.Load()
-	PORT = getEnv("PORT", "5000")
+	godotenv.Load(".env")
+	PORT = getEnv("PORT", "3000")
 	MONGO_URI = getEnv("MONGO_URI", "mongodb://localhost:27017/notes")
 	JWT_SECRET = getEnv("JWT_SECRET", "golang")
 	EMAIL = getEnv("EMAIL", "")
