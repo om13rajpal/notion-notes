@@ -7,9 +7,11 @@ import (
 )
 
 var (
-	PORT string
-	MONGO_URI string
-	JWT_SECRET string
+	PORT           string
+	MONGO_URI      string
+	JWT_SECRET     string
+	EMAIL          string
+	EMAIL_PASSWORD string
 )
 
 func LoadEnv() {
@@ -17,6 +19,8 @@ func LoadEnv() {
 	PORT = getEnv("PORT", "5000")
 	MONGO_URI = getEnv("MONGO_URI", "mongodb://localhost:27017/notes")
 	JWT_SECRET = getEnv("JWT_SECRET", "golang")
+	EMAIL = getEnv("EMAIL", "")
+	EMAIL_PASSWORD = getEnv("EMAIL_PASSWORD", "")
 }
 
 func getEnv(key string, fallback string) string {

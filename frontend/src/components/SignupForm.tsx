@@ -15,11 +15,12 @@ import {
   FormMessage,
 } from "@/components/ui/form";
 import { Input } from "@/components/ui/input";
+import axios from "axios";
+import { API_URL } from "@/constants/url";
+import { toast } from "sonner";
+import { useNavigate } from "react-router-dom";
 
 const formSchema = z.object({
-  username: z.string().min(2, {
-    message: "Username must be at least 2 characters.",
-  }),
   password: z.string().min(6, {
     message: "Password must be at least 6 characters.",
   }),
@@ -29,23 +30,36 @@ const formSchema = z.object({
 });
 
 export function SignupForm() {
+  const navigate = useNavigate();
   const form = useForm<z.infer<typeof formSchema>>({
     resolver: zodResolver(formSchema),
     defaultValues: {
-      username: "",
       password: "",
-      email: ""
+      email: "",
     },
   });
 
-  function onSubmit(values: z.infer<typeof formSchema>) {
-    console.log(values);
+  async function onSubmit(values: z.infer<typeof formSchema>) {
+    const res = await axios.post(API_URL + "/signup", values, {
+      headers: {
+        "Content-Type": "application/json",
+      },
+    });
+
+    const data = res.data;
+
+    if (data.status) {
+      localStorage.setItem("token", data.token);
+      toast.success("User signed up successfully")
+      setInterval(() => {}, 1500);
+      navigate("/")
+    }
   }
 
   return (
     <Form {...form}>
       <form onSubmit={form.handleSubmit(onSubmit)} className="space-y-8">
-      <FormField
+        <FormField
           control={form.control}
           name="email"
           render={({ field }) => (
@@ -56,22 +70,6 @@ export function SignupForm() {
               </FormControl>
               <FormDescription>
                 This is your public email address.
-              </FormDescription>
-              <FormMessage />
-            </FormItem>
-          )}
-        />
-        <FormField
-          control={form.control}
-          name="username"
-          render={({ field }) => (
-            <FormItem>
-              <FormLabel>Username</FormLabel>
-              <FormControl>
-                <Input placeholder="John Doe" {...field} />
-              </FormControl>
-              <FormDescription>
-                This is your public display name.
               </FormDescription>
               <FormMessage />
             </FormItem>
@@ -91,7 +89,7 @@ export function SignupForm() {
             </FormItem>
           )}
         />
-        <Button type="submit">Login</Button>
+        <Button type="submit">Sign Up</Button>
       </form>
     </Form>
   );

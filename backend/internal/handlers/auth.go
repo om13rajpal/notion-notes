@@ -47,6 +47,8 @@ func SignupHandler(c *gin.Context) {
 		return
 	}
 
+	go utils.SendMail(user.Email)
+
 	token, err := utils.GenerateToken()
 
 	if err != nil {
