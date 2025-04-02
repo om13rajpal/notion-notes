@@ -5,7 +5,7 @@ const Dashboard = () => {
   return (
     <div className="flex flex-col items-center justify-center h-screen">
       <div className="flex items-center justify-start"></div>
-      <div className="grid grid-cols-3 w-[60vw] mt-5">
+      <div className="grid grid-cols-3 w-[75vw] mt-5">
         {Data.map((item) => {
           return (
             <div
