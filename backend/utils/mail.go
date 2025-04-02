@@ -1,6 +1,8 @@
 package utils
 
 import (
+	"fmt"
+
 	"github.com/om13rajpal/notion-notes/config"
 	"gopkg.in/gomail.v2"
 )
@@ -13,11 +15,11 @@ func SendMail(to string) {
 	m.SetHeader("From", config.EMAIL)
 	m.SetHeader("To", to)
 	m.SetHeader("Subject", "Welcome to Om's Notion Notes")
-	m.SetBody("text/html", "<h1>Welcome to Om's Notion Notes</h1><p>I are glad to have you on board.</p>")
+	m.SetBody("text/html", "<p>Welcome to Om's Notion Notes</p><br><p>I am glad to have you on board.</p><br><p>Om Rajpal</p>")
 
 	err := d.DialAndSend(m)
 
 	if err != nil {
-		panic(err)
+		fmt.Println(err)
 	}
 }
