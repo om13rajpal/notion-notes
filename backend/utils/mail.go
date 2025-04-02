@@ -15,7 +15,7 @@ func SendMail(to string) {
 	m.SetHeader("From", config.EMAIL)
 	m.SetHeader("To", to)
 	m.SetHeader("Subject", "Welcome to Om's Notion Notes")
-	m.SetBody("text/html", "<p>Welcome to Om's Notion Notes</p><br><p>I am glad to have you on board.</p><br><p>Om Rajpal</p>")
+	m.SetBody("text/html", "<p>Welcome to Om's Notion Notes :D</p><p>I am glad to have you on board.</p><p>Om Rajpal</p>")
 
 	err := d.DialAndSend(m)
 
